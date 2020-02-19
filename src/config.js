@@ -1,10 +1,11 @@
+import { API_KEY, APP_ID, MESSAGING_SENDER_ID } from 'react-native-dotenv'
 import Firebase from 'firebase';
 import 'firebase/firestore';
 import 'firebase/auth';
 
 // Initialize Firebase
 Firebase.initializeApp({
-  apiKey: "AIzaSyACiRoGPsqUpb0j-0x5KsP-2Y1u9AdhQpI",
+  apiKey: API_KEY,
   authDomain: "sub-out.firebaseapp.com",
   projectId: "sub-out",
   storageBucket: "sub-out.appspot.com",
@@ -21,13 +22,13 @@ export let arrayRemove = (item) => Firebase.firestore.FieldValue.arrayRemove(ite
 
 
 // var firebaseConfig = {
-//   apiKey: "AIzaSyACiRoGPsqUpb0j-0x5KsP-2Y1u9AdhQpI",
+//   apiKey: API_KEY,
 //   authDomain: "sub-out.firebaseapp.com",
 //   databaseURL: "https://sub-out.firebaseio.com",
 //   projectId: "sub-out",
 //   storageBucket: "sub-out.appspot.com",
-//   messagingSenderId: "831431957639",
-//   appId: "1:831431957639:web:f69262ea1fdbf9d996ac22"
+//   messagingSenderId: MESSAGING_SENDER_ID,
+//   appId: APP_ID
 // };
 // // Initialize Firebase
 // firebase.initializeApp(firebaseConfig);
