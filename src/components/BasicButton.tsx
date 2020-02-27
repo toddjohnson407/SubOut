@@ -42,7 +42,7 @@ const styles: any = StyleSheet.create({
     backgroundColor: 'transparent',
     color: '#ffff',
     fontSize: 24,
-    letterSpacing: 2,
+    // letterSpacing: 2,
   }
 })
 

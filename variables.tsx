@@ -14,6 +14,7 @@ const fonts: {[name: string]: Font.FontSource;} = {
 }
 
 const primaryColor: any = '#FF6A47';
+const lightColor: any = '#fc7c5f';
 
 const bodyText: any = {
   fontSize: 20,
@@ -45,5 +46,6 @@ export {
   bodyText,
   fonts,
   screenView,
-  defaultNavigationOptions
+  defaultNavigationOptions,
+  lightColor
 }

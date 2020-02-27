@@ -88,10 +88,9 @@ function MainContainer() {
       <Stack.Navigator>
         <Stack.Screen 
           name="Main" 
-          component={MainApp} 
-          options={{ 
-            title: 'Your Teams',
-            headerTitle: props => <MainHeader />
+          component={Dashboard} 
+          options={{
+            header: props => <MainHeader />
           }}
         />
       </Stack.Navigator>
@@ -131,14 +130,18 @@ const styles = StyleSheet.create({
   },
 
   headerStyle: {
-    height: 200,
+    height: 175,
     backgroundColor: vars.primaryColor,
-    width: '100%'
+    justifyContent: 'flex-start',
+    alignItems: 'center',
+    flexDirection: 'row'
   },
   headerTitleStyle: {
     color: '#fff',
-    fontSize: 38,
-    // letterSpacing: 1,
-    fontFamily: 'roboto-bold'
+    fontSize: 32,
+    fontFamily: 'open-sans-bold',
+    alignItems: 'flex-start',
+    marginLeft: 24,
+    marginTop: 24
   }
 });
