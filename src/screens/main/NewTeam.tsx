@@ -8,7 +8,7 @@ export class NewTeam extends React.Component {
   state: any = {}
 
   componentDidMount(): any {
-
+    console.log('new team rendered')
   }
 
   render(): any {

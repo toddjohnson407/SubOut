@@ -1,4 +1,4 @@
-import { createTimestamp } from '../../config';
+import { createTimestamp } from '@base/src/config';
 
 class GamePlayer {
 
@@ -15,10 +15,9 @@ class GamePlayer {
 
 export default class Game {
 
-  date: Date;
+  date: any;
 
   constructor(
-    date: Date,
     public rosterId: string,
     public players: GamePlayer[],
     public opts: {
@@ -30,7 +29,7 @@ export default class Game {
       opponent?: string
     }
   ) {
-    this.date = createTimestamp(this.date);
+    this.date = createTimestamp();
   }
   
   static gameFromDatabase(opts = {}): Game {

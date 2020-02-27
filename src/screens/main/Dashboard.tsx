@@ -8,13 +8,13 @@ export class Dashboard extends React.Component {
   state: any = {}
 
   componentDidMount(): any {
-
+    console.log('dashboard rendering');
   }
 
   render(): any {
     return (
-      <View>
-        <Text>Dashboard Screen Renders</Text>
+      <View style={[vars.screenView]}>
+        {/* <Text>Dashboard Renders</Text> */}
       </View>
     )
   }
@@ -22,6 +22,15 @@ export class Dashboard extends React.Component {
 }
 
 const styles = StyleSheet.create({
-
+  loginView: {
+    width: 500,
+    height: 400,
+    color: 'black',
+    // flex: 1,
+    // flexDirection: 'column',
+    // justifyContent: 'space-around',
+    backgroundColor: 'pink',
+    paddingTop: 15
+  },
 })
 

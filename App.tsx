@@ -9,16 +9,13 @@ import { Ionicons, Foundation, MaterialIcons, MaterialCommunityIcons, Entypo, Fo
 import { auth } from '@base/src/config';
 
 import { LoginRegister } from '@screens/LoginRegister';
-// import { Dashboard } from '@screens/main/Dashboard';
-// import { NewTeam } from '@screens/main/NewTeam';
-// import { Settings } from '@screens/main/Settings';
 import { Dashboard, NewTeam, Settings } from '@screens/MainScreens';
 
 import { NavigationContainer } from '@react-navigation/native';
-import { createStackNavigator } from '@react-navigation/stack';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
+import { createStackNavigator } from '@react-navigation/stack';
 
-import { ErrorBoundary } from '@components/ErrorBoundary';
+import * as vars from '@base/variables'
 
 const Stack = createStackNavigator();
 const Tab = createBottomTabNavigator();
@@ -30,6 +27,7 @@ function MainApp() {
         activeTintColor: '#ffff',
         inactiveTintColor: '#94ecfc',
         size: 30,
+        initialRouteName: 'Dashboard',
         showLabel: false,
         style: {
           backgroundColor: primaryColor + 'ff',
@@ -74,19 +72,32 @@ function MainApp() {
   );
 }
 
-const MainContainer = () => {
+function MainHeader() {
+  return(
+    <View style={styles.headerStyle}>
+      <Text style={styles.headerTitleStyle}>
+        Your Teams
+      </Text>
+    </View>
+  )
+}
+
+function MainContainer() {
   return (
     <NavigationContainer>
-      <Stack.Navigator
-        initialRouteName="MainApp"
-        headerMode="none"
-      >
-        <Stack.Screen name="MainApp" component={MainApp} />
+      <Stack.Navigator>
+        <Stack.Screen 
+          name="Main" 
+          component={MainApp} 
+          options={{ 
+            title: 'Your Teams',
+            headerTitle: props => <MainHeader />
+          }}
+        />
       </Stack.Navigator>
     </NavigationContainer>
   )
 }
-
 
 export default class App extends React.Component {
 
@@ -94,49 +105,20 @@ export default class App extends React.Component {
   
   async componentDidMount() {
     try {
-      this.setState({ loggedIn: auth.currentUser ? true : false });
-
       await Font.loadAsync(fonts);
 
-      this.setState({ fontsLoaded: true });
+      this.setState({ loggedIn: !!auth.currentUser, fontsLoaded: true });
 
-      auth.onAuthStateChanged(user => this.setState({ loggedIn: user ? true : false }));
-      
+      auth.onAuthStateChanged(user => this.setState({ loggedIn: !!user }));
     } catch(err) { console.log(err, 'Error Mounting App'); }
   }
 
   render() {
     return (
-      <View style={styles.container}>
-        { 
-          this.state.fontsLoaded && this.state.loggedIn !== null ? ( 
-            this.state.loggedIn ? (<MainContainer/>) : (<LoginRegister/>)
-          ) : null
-        }
-      </View>
+      this.state.fontsLoaded && this.state.loggedIn !== null ? ( 
+        this.state.loggedIn ? (<MainContainer/>) : (<LoginRegister/>)
+      ) : null
     )
-    if (!this.state.fontsLoaded) {
-      return (
-          <AppLoading onError={console.warn}/>
-      )
-    }
-    return (
-      // <View style={styles.container}>
-        <NavigationContainer>
-          <Stack.Navigator
-            initialRouteName="LoginRegister"
-            // title="Sub Out"
-            // screenOptions={{
-            //   headerStyle: { backgroundColor: 'blue', height: 200 }
-            // }}
-            headerMode="none"
-          >
-            <Stack.Screen name="LoginRegister" component={LoginRegister} />
-            <Stack.Screen name="MainApp" component={MainApp} />
-          </Stack.Navigator>
-        </NavigationContainer>
-
-    );
   }
 }
 
@@ -147,4 +129,16 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
   },
+
+  headerStyle: {
+    height: 200,
+    backgroundColor: vars.primaryColor,
+    width: '100%'
+  },
+  headerTitleStyle: {
+    color: '#fff',
+    fontSize: 38,
+    // letterSpacing: 1,
+    fontFamily: 'roboto-bold'
+  }
 });

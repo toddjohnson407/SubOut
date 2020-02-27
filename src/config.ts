@@ -15,7 +15,7 @@ export const db = Firebase.firestore();
 export const auth = Firebase.auth();
 export const storage = Firebase.storage();
 
-export let createTimestamp = () => Firebase.firestore.Timestamp.fromDate(new Date())
+export let createTimestamp = (date: Date = new Date()) => Firebase.firestore.Timestamp.fromDate(date)
 export let arrayPush = (item) => Firebase.firestore.FieldValue.arrayUnion(item)
 export let arrayRemove = (item) => Firebase.firestore.FieldValue.arrayRemove(item)
 

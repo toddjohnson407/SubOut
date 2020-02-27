@@ -8,10 +8,11 @@ import { createFormField } from '@utils/FormUtils';
 import * as vars from '@base/variables'
 import { Observable } from 'rxjs';
 
-import { auth } from '@base/src/config';
+import { auth, createTimestamp, db } from '@base/src/config';
+
+import Profile from '@utils/db/Profile';
 
 // import { useNavigation } from '@react-navigation/native';
-import { ErrorBoundary } from '@components/ErrorBoundary';
 
 export class LoginRegister extends React.Component {
 
@@ -39,7 +40,6 @@ export class LoginRegister extends React.Component {
       createFormField('username', 'Username', 'words'),
       createFormField('firstName', 'First Name', 'words'),
       createFormField('lastName', 'Last Name', 'words'),
-      createFormField('email', 'Email'),
     ],
 
     otherAccountAction1: `Don't have an account?`,
@@ -63,7 +63,9 @@ export class LoginRegister extends React.Component {
       let { loginForm } = this.state;
       
       if (loginForm.every(({value}) => !!value)) {
-        let [email, password] = loginForm.map(({ key, value }) => ({ [key]: value }));
+        // let [email, password] = loginForm.map(({ key, value }) => ({ [key]: value }));
+        let [email, password] = loginForm.map(({ value }) => value);
+
 
         if (email && password) {
           auth.signInWithEmailAndPassword(email, password).then(() => { console.log('Logged In') }).catch(err => console.log('Error logging in', err));
@@ -74,7 +76,16 @@ export class LoginRegister extends React.Component {
   }
 
   register = (): any => {
-    console.log('Register Form:', this.state.registerForm)
+
+    let [email, password] = this.state.loginForm.map(({ value }) => value);
+    let [confirmPassword, username, firstName, lastName] = this.state.registerForm.map(({ value }) => value);
+
+    auth.createUserWithEmailAndPassword(email, password).then((res) => {
+      let profile = new Profile(res.user.uid, firstName, lastName, username, createTimestamp());
+      profile.createProfile();
+      // this.createProfile(profile);
+
+    }).catch(error => this.setState({ errorMessage: error.message }))
   }
 
   toggleAccountAction = (): any => {
