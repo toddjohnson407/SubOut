@@ -75,6 +75,11 @@ function MainApp() {
 function MainHeader() {
   return(
     <View style={styles.headerStyle}>
+      <View style={styles.headerActions}>
+        <MaterialCommunityIcons size={32} color="white" name="account"/>
+        <Ionicons size={30} color="white" name="ios-add-circle-outline"/>
+
+      </View>
       <Text style={styles.headerTitleStyle}>
         Your Teams
       </Text>
@@ -130,16 +135,25 @@ const styles = StyleSheet.create({
   },
 
   headerStyle: {
-    height: 175,
+    height: 200,
     backgroundColor: vars.primaryColor,
-    justifyContent: 'flex-start',
+    justifyContent: 'center',
+    paddingTop: 12
+    // backgroundColor: 'black',
+
+  },
+  headerActions: {
     alignItems: 'center',
-    flexDirection: 'row'
+    justifyContent: 'space-between',
+    flexDirection: 'row',
+    marginHorizontal: 24,
   },
   headerTitleStyle: {
+
     color: '#fff',
-    fontSize: 32,
-    fontFamily: 'open-sans-bold',
+    // color: vars.primaryColor,
+    fontSize: 35,
+    fontFamily: 'roboto-regular',
     alignItems: 'flex-start',
     marginLeft: 24,
     marginTop: 24

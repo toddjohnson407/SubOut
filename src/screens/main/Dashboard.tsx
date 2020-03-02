@@ -31,8 +31,8 @@ export class Dashboard extends React.Component {
 const styles = StyleSheet.create({
 
   dashboardView: {
-    backgroundColor: vars.primaryColor,
-    // backgroundColor: '#eaeaea'
+    // backgroundColor: 'black',
+    // backgroundColor: vars.primaryColor
     // backgroundColor: '#D2D2D4'
     // backgroundColor: '#D5DAE2'
   },
@@ -46,6 +46,7 @@ const styles = StyleSheet.create({
     flex: 1,
     alignItems: 'center',
     backgroundColor: '#fff',
+    // backgroundColor: vars.primaryColor,
     marginHorizontal: 16,
     borderTopLeftRadius: 16,
     borderTopRightRadius: 16,
@@ -59,7 +60,8 @@ const styles = StyleSheet.create({
   dashboardCard: {
     width: '80%',
     // backgroundColor: vars.lightColor,
-    backgroundColor: '#fff',
+    // backgroundColor: '#fff',
+    // backgroundColor: vars.primaryColor,
     borderRadius: 16,
     height: 100,
     marginBottom: 16,
