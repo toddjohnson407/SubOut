@@ -5,7 +5,7 @@ import * as vars from '@base/variables'
 import { BasicHeader } from '@components/BasicHeader';
 import { createFormField } from '@utils/FormUtils';
 import BasicTextField from '@components/BasicTextField';
-import { Ionicons } from '@expo/vector-icons';
+import { Ionicons, MaterialIcons } from '@expo/vector-icons';
 import BasicButton from '@components/BasicButton';
 
 export class NewTeam extends React.Component {
@@ -45,8 +45,12 @@ export class NewTeam extends React.Component {
     if (this.maxSteps > this.state.step) {
       this.addMinPlayers();
       this.setState((prevState: any) => ({ step: prevState.step + 1 }));
+    }
+  }
+  prevStep = (): any => {
+    if (this.state.step > 1) {
+      this.setState((prevState: any) => ({ step: prevState.step - 1 }));
     } 
-    console.log(this.state.step, this.maxSteps > this.state.step);
   }
 
   addMinPlayers = (): void => {
@@ -69,7 +73,7 @@ export class NewTeam extends React.Component {
   render() {
     return (
       <View style={[vars.screenView, styles.newTeamView]}>
-        <BasicHeader title="New Team" useBackButton={true}/>
+        <BasicHeader title="New Team" useCloseButton={true}/>
 
 
         <KeyboardAvoidingView style={styles.teamForm} behavior="padding" keyboardVerticalOffset={-100}>
@@ -108,10 +112,16 @@ export class NewTeam extends React.Component {
         </KeyboardAvoidingView>
 
         <View style={styles.actions}>
-          {/* <TouchableOpacity onPress={this.nextStep}>
-            <Ionicons size={40} name="ios-arrow-dropright" color="white"/>
-          </TouchableOpacity> */}
-          <BasicButton title="Continue" style={styles.continueButton} onPress={() => this.nextStep()}/>
+          { this.state.step !== 1 ? <TouchableOpacity
+            disabled={this.state.step === 1} 
+            onPress={this.prevStep} 
+            style={[styles.stepBackButton, {
+              backgroundColor: this.state.step !== 1 ? 'white' : '#fff7'
+            }]}
+          >
+            <MaterialIcons size={48} name="keyboard-arrow-left" color={vars.primaryColor}/>
+          </TouchableOpacity> : null }
+          <BasicButton title="Continue" style={styles.continueButton} textStyle={styles.continueButtonText} onPress={() => this.nextStep()}/>
         </View>
       </View>
       
@@ -133,17 +143,36 @@ const styles = StyleSheet.create({
   },
   actions: {
     flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center'
+    // justifyContent: 'center',
+    width: '85%',
+    alignSelf: 'center',
+    alignItems: 'center',
+    flexDirection: 'row'
   },
   continueButton: {
-    width: '85%',
+    flex: 4,
+    backgroundColor: '#fff',
+    padding: 5
+    // width: '85%',
     // borderRadius: 0,
     // backgroundColor: 'white',
     // color: vars.primaryColor
   },
-  newTeamHeader: {
-    // flex: 0.5
+  continueButtonText: {
+    color: vars.primaryColor,
+    fontFamily: vars.headerFont
+  },
+  stepBackButton: {
+    flex: 1,
+    // backgroundColor: 'transparent',
+    backgroundColor: 'white',
+    textAlign: 'center',
+    justifyContent: 'center',
+    alignItems: 'center',
+    borderRadius: 4,
+    borderWidth: 1,
+    borderColor: 'transparent',
+    marginRight: 12,
   }
 });
 

@@ -17,17 +17,16 @@ let IconButton = ({ name, action, size = 30, isIon = true }) => {
   )
 }
 
-export const BasicHeader = ({ title, useBackButton = false }) => {
+export const BasicHeader = ({ title, useBackButton = false, useCloseButton = false }) => {
   return (
     <View style={styles.headerStyle}>
       <View style={styles.headerActions}>
         { 
-          useBackButton ? 
-          <IconButton name="ios-arrow-back" action={() => back()}/>
+          useCloseButton ? <IconButton name="ios-close" size={40} action={() => back()}/>
+          : useBackButton ? <IconButton name="ios-arrow-back" action={() => back()}/>
           : <IconButton name="ios-add-circle-outline" action={() => navigate('NewTeam', null)}/>
         }
-        {/* { !useBackButton ? <MaterialCommunityIcons size={32} color="white" name="account"/> : null } */}
-        { !useBackButton ? <IconButton size={32} isIon={false} name="account" action={() => navigate('Settings', null)}/> : null }
+        { !useBackButton && !useCloseButton ? <IconButton size={32} isIon={false} name="account" action={() => navigate('Settings', null)}/> : null }
 
       </View>
       

@@ -81,7 +81,7 @@ function MainContainer() {
         <Stack.Screen name="Settings" component={Settings}/>
         <Stack.Screen name="NewTeam" component={NewTeam}
           options={{
-            // cardStyleInterpolator: CardStyleInterpolators.forVerticalIOS
+            cardStyleInterpolator: CardStyleInterpolators.forVerticalIOS
           }}
         />
       </Stack.Navigator>
