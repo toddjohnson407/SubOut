@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { StyleSheet, Text, View } from 'react-native';
+import { StyleSheet, Text, View, KeyboardAvoidingView } from 'react-native';
 import { AppLoading } from 'expo';
 import * as Font from 'expo-font';
 
@@ -13,9 +13,10 @@ import { Dashboard, NewTeam, Settings } from '@screens/MainScreens';
 
 import { NavigationContainer } from '@react-navigation/native';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
-import { createStackNavigator } from '@react-navigation/stack';
+import { createStackNavigator, CardStyleInterpolators } from '@react-navigation/stack';
 
 import * as vars from '@base/variables'
+import { navigationRef } from './src/RootNavigation';
 
 const Stack = createStackNavigator();
 const Tab = createBottomTabNavigator();
@@ -72,30 +73,15 @@ function MainApp() {
   );
 }
 
-function MainHeader() {
-  return(
-    <View style={styles.headerStyle}>
-      <View style={styles.headerActions}>
-        <MaterialCommunityIcons size={32} color="white" name="account"/>
-        <Ionicons size={30} color="white" name="ios-add-circle-outline"/>
-
-      </View>
-      <Text style={styles.headerTitleStyle}>
-        Your Teams
-      </Text>
-    </View>
-  )
-}
-
 function MainContainer() {
   return (
-    <NavigationContainer>
-      <Stack.Navigator>
-        <Stack.Screen 
-          name="Main" 
-          component={Dashboard} 
+    <NavigationContainer ref={navigationRef}>
+      <Stack.Navigator headerMode="none">
+        <Stack.Screen name="Dashboard" component={Dashboard}/>
+        <Stack.Screen name="Settings" component={Settings}/>
+        <Stack.Screen name="NewTeam" component={NewTeam}
           options={{
-            header: props => <MainHeader />
+            // cardStyleInterpolator: CardStyleInterpolators.forVerticalIOS
           }}
         />
       </Stack.Navigator>
@@ -105,23 +91,37 @@ function MainContainer() {
 
 export default class App extends React.Component {
 
+  /** 
+   * Tracks whether or not component is mounted to
+   * ensure setState() isn't call while unmounted
+   */
+  _isMounted: boolean = false;
+
   state: any = { fontsLoaded: false, loggedIn: null }
   
   async componentDidMount() {
+    this._isMounted = true;
     try {
+
       await Font.loadAsync(fonts);
-
+      
       this.setState({ loggedIn: !!auth.currentUser, fontsLoaded: true });
+      auth.onAuthStateChanged(user => this._isMounted && this.setState({ loggedIn: !!user }));
 
-      auth.onAuthStateChanged(user => this.setState({ loggedIn: !!user }));
     } catch(err) { console.log(err, 'Error Mounting App'); }
+  }
+  
+  componentWillUnmount() {
+    this._isMounted = false;
   }
 
   render() {
     return (
-      this.state.fontsLoaded && this.state.loggedIn !== null ? ( 
-        this.state.loggedIn ? (<MainContainer/>) : (<LoginRegister/>)
-      ) : null
+      <KeyboardAvoidingView behavior="padding" style={[vars.screenView]} keyboardVerticalOffset={-50}>
+        { this.state.fontsLoaded && this.state.loggedIn !== null ? ( 
+          this.state.loggedIn ? (<MainContainer/>) : (<LoginRegister/>)
+        ) : null }
+      </KeyboardAvoidingView>
     )
   }
 }
@@ -132,30 +132,5 @@ const styles = StyleSheet.create({
     backgroundColor: '#fff',
     alignItems: 'center',
     justifyContent: 'center',
-  },
-
-  headerStyle: {
-    height: 200,
-    backgroundColor: vars.primaryColor,
-    justifyContent: 'center',
-    paddingTop: 12
-    // backgroundColor: 'black',
-
-  },
-  headerActions: {
-    alignItems: 'center',
-    justifyContent: 'space-between',
-    flexDirection: 'row',
-    marginHorizontal: 24,
-  },
-  headerTitleStyle: {
-
-    color: '#fff',
-    // color: vars.primaryColor,
-    fontSize: 35,
-    fontFamily: 'roboto-regular',
-    alignItems: 'flex-start',
-    marginLeft: 24,
-    marginTop: 24
   }
 });

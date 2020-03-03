@@ -1,5 +1,5 @@
 import React from 'react';
-import { Animated, View, SafeAreaView, Text, StyleSheet, TouchableOpacity, UIManager, LayoutAnimation, Image } from 'react-native';
+import { Animated, View, SafeAreaView, Text, StyleSheet, TouchableOpacity, UIManager, LayoutAnimation, Image, KeyboardAvoidingView } from 'react-native';
 import BasicTextField from '@components/BasicTextField';
 import BasicButton from '@components/BasicButton';
 import { LinearGradient } from 'expo-linear-gradient';
@@ -11,6 +11,7 @@ import { Observable } from 'rxjs';
 import { auth, createTimestamp, db } from '@base/src/config';
 
 import Profile from '@utils/db/Profile';
+import { profileConverter } from '@utils/db/converters';
 
 // import { useNavigation } from '@react-navigation/native';
 
@@ -22,24 +23,18 @@ export class LoginRegister extends React.Component {
    */
   _isMounted: boolean = false;
 
-  // navigation = useNavigation();
-
-  // static navigationOptions = {
-  //   title: 'LOGINDSFKS',
-  // };
-
   state: any = {
     user: null,
 
     loginForm: [
-      createFormField('email', 'Email'),
-      createFormField('password', 'Password', 'none', true)
+      createFormField('email', 'Email', { returnKeyType: 'next', autoCapitalize: 'none' }),
+      createFormField('password', 'Password', { isSecure: true })
     ],
     registerForm: [
-      createFormField('confirmPassword', 'Confirm Password', 'none', true),
-      createFormField('username', 'Username', 'words'),
-      createFormField('firstName', 'First Name', 'words'),
-      createFormField('lastName', 'Last Name', 'words'),
+      createFormField('confirmPassword', 'Confirm Password', { isSecure: true }),
+      createFormField('username', 'Username', { autoCapitalize: 'words' }),
+      createFormField('firstName', 'First Name', { autoCapitalize: 'words' }),
+      createFormField('lastName', 'Last Name', { autoCapitalize: 'words' }),
     ],
 
     otherAccountAction1: `Don't have an account?`,
@@ -49,7 +44,6 @@ export class LoginRegister extends React.Component {
 
   componentDidMount(): any {
     this._isMounted = true;
-    // auth.onAuthStateChanged(user => this._isMounted && this.setState({ user }))
   }
 
   componentWillUnmount(): any {
@@ -63,14 +57,13 @@ export class LoginRegister extends React.Component {
       let { loginForm } = this.state;
       
       if (loginForm.every(({value}) => !!value)) {
-        // let [email, password] = loginForm.map(({ key, value }) => ({ [key]: value }));
         let [email, password] = loginForm.map(({ value }) => value);
 
-
         if (email && password) {
-          auth.signInWithEmailAndPassword(email, password).then(() => { console.log('Logged In') }).catch(err => console.log('Error logging in', err));
+          auth.signInWithEmailAndPassword(email, password)
+            .then(_ => { console.log('Logged In') })
+            .catch(err => console.log('Error logging in', err));
         }
-
       }
     }
   }
@@ -82,8 +75,10 @@ export class LoginRegister extends React.Component {
 
     auth.createUserWithEmailAndPassword(email, password).then((res) => {
       let profile = new Profile(res.user.uid, firstName, lastName, username, createTimestamp());
-      profile.createProfile();
-      // this.createProfile(profile);
+
+      db.collection('profiles').doc().withConverter(profileConverter).set(profile)
+        .then(_ => console.log('Profile created'))
+        .catch(err => console.log('Error creating profile:', err))
 
     }).catch(error => this.setState({ errorMessage: error.message }))
   }
@@ -120,10 +115,12 @@ export class LoginRegister extends React.Component {
             <BasicTextField
             key={index}
             label={field.label}
-            autoCapitalize={field.autoCapitalize}
-            secureTextEntry={field.isSecure}
-            value={field.value}
-            onChangeText={newVal => this._isMounted && this.handleFormUpdate('loginForm', index, newVal) } />
+            autoCapitalize={field.opts.autoCapitalize}
+            secureTextEntry={field.opts.isSecure}
+            value={field.opts.value}
+            returnKeyType={field.opts.returnKeyType}
+            onChangeText={newVal => this._isMounted && this.handleFormUpdate('loginForm', index, newVal) }
+            />
           )
         }) }
 
@@ -132,10 +129,12 @@ export class LoginRegister extends React.Component {
             <BasicTextField
               key={index}
               label={field.label}
-              autoCapitalize={field.autoCapitalize}
-              secureTextEntry={field.isSecure}
-              value={field.value}
-              onChangeText={newVal => this._isMounted && this.handleFormUpdate('registerForm', index, newVal) } />
+              autoCapitalize={field.opts.autoCapitalize}
+              secureTextEntry={field.opts.isSecure}
+              value={field.opts.value}
+              returnKeyType={field.opts.returnKeyType}
+              onChangeText={newVal => this._isMounted && this.handleFormUpdate('registerForm', index, newVal) } 
+            />
           )
         }) }
       </View> 
@@ -148,7 +147,6 @@ export class LoginRegister extends React.Component {
   render() {
     return (
       <View style={[vars.screenView, styles.loginView]}>
-
         { 
           this.state.isLoggingIn ? <View style={styles.loginHeaderContainer}>
             <Image
@@ -161,10 +159,8 @@ export class LoginRegister extends React.Component {
           </View> 
         }
 
-        <View style={styles.bottomContainer}>
-
+        <View>
           <this.FormsView/>
-
 
           <View style={styles.actionContainer}>
             <BasicButton style={{marginTop: 50}} title={this.state.isLoggingIn ? 'Log In' : 'Create Account'} onPress={this.login}/>
@@ -177,8 +173,8 @@ export class LoginRegister extends React.Component {
 
 
         <LinearGradient
-          colors={[vars.primaryColor + 'd0', '#f9a08b']}
-          style={{ position: 'absolute', zIndex: -1, left: 0, right: 0, bottom: 0, height: 800 }} />
+          colors={[vars.primaryColor + 'd0', '#93EAB9']}
+          style={{ position: 'absolute', zIndex: -1, left: 0, right: 0, bottom: 0, height: '100%' }} />
 
       </View>
     )
@@ -187,15 +183,15 @@ export class LoginRegister extends React.Component {
 
 const styles = StyleSheet.create({
   bottomContainer: {
-
+    
   },
   loginLogo: {
     height: 100,
+    alignSelf: 'center',
     resizeMode: 'contain'
   },
   loginView: {
     width: '100%',
-    flex: 1,
     flexDirection: 'column',
     justifyContent: 'space-around',
     backgroundColor: vars.primaryColor,
@@ -224,6 +220,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     alignSelf: 'center',
     width: '85%',
+    // flex: 0.75
   },
   loginHeader: {
     marginTop: 15,

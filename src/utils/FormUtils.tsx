@@ -7,10 +7,28 @@
 let createFormField = (
   key: string,
   label: string,
-  autoCapitalize: string = 'none',
-  isSecure: boolean = false,
-  value: string = '',
-): any => ({ key, label, autoCapitalize, isSecure, value })
+  options: {
+    keyboardType?: string
+    autoCapitalize?: string,
+    isSecure?: boolean,
+    value?: string,
+    returnKeyType?: any
+  } = null
+): any => {
+
+  let allOptions = {
+    keyboardType: 'default',
+    autoCapitalize: 'sentences',
+    isSecure: false,
+    value: '',
+  }
+
+  options && Object.entries(options).forEach(([key, val], index) => {
+    if (val) allOptions[key] = val;
+  });
+
+  return { key, label, opts: allOptions }
+}
 
 export {
   createFormField

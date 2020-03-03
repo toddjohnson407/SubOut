@@ -1,5 +1,6 @@
 /* This file stores style variables and layouts that are used throughout the application */
 import * as Font from 'expo-font';
+import { Dimensions } from 'react-native';
 
 const fonts: {[name: string]: Font.FontSource;} = {
   'open-sans-bold': require('./assets/fonts/OpenSans-Bold.ttf'),
@@ -31,11 +32,26 @@ const fonts: {[name: string]: Font.FontSource;} = {
   'lato-black': require('./assets/fonts/Lato-Black.ttf'),
   'lato-bold': require('./assets/fonts/Lato-Regular.ttf'),
   'lato-regular': require('./assets/fonts/Lato-Regular.ttf'),
+
+  'nunito-black': require('./assets/fonts/Nunito-Black.ttf'),
+  'nunito-bold': require('./assets/fonts/Nunito-Bold.ttf'),
+
+  'hind-bold': require('./assets/fonts/Hind-Bold.ttf'),
 }
 
 const primaryColor: any = '#5CD391';
+
+// const primaryColor: any = '#0cafcc';
+// const primaryColor: any = '#0C5E5A';
+// const primaryColor: any = '#DCC040';
+// const primaryColor: any = '#17416A';
+// const primaryColor: any = '#A1C5BD';
 // const primaryColor: any = '#FF6A47';
-const lightColor: any = '#fc7c5f';
+// const lightColor: any = '#fc7c5f';
+
+const headerFont: string = 'hind-bold';
+// const headerFont: string = 'source-sans-black';
+// const headerFont: string = 'nunito-black';
 
 const bodyText: any = {
   fontSize: 20,
@@ -45,7 +61,8 @@ const bodyText: any = {
 const screenView: any = {
   flex: 1,
   height: '100%',
-  backgroundColor: '#fff'
+  // height: Dimensions.get('screen').height,
+  backgroundColor: '#fff',
 }
 
 const defaultNavigationOptions: any = {
@@ -68,5 +85,6 @@ export {
   fonts,
   screenView,
   defaultNavigationOptions,
-  lightColor
+  // lightColor,
+  headerFont
 }

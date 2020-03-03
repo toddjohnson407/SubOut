@@ -1,21 +1,24 @@
 import React from 'react';
-import { TextInput, Text, View, StyleSheet } from 'react-native';
+import { TextInput, Text, View, StyleSheet, KeyboardAvoidingView } from 'react-native';
 
-const BasicTextField = ({ label, value, onChangeText, secureTextEntry = false, autoCapitalize = null }) => {
+const BasicTextField = ({ label, value, onChangeText = null, secureTextEntry = false, autoCapitalize = null, returnKeyType, keyboardType }) => {
 
   let state: any = { text: '' };
 
   return (
     <View style={styles.containerStyle}>
+
       <TextInput
         autoCapitalize={autoCapitalize || "sentences"}
         style={styles.inputStyle}
         onChangeText={onChangeText}
-        value={value}
+        // value={value}
         secureTextEntry={secureTextEntry}
         placeholder={label}
-        placeholderTextColor={'#ffff'}
+        placeholderTextColor={'#fff'}
         autoCorrect={false}
+        returnKeyType={returnKeyType || "done"}
+        keyboardType={keyboardType || "default"}
       />
     </View>
   );

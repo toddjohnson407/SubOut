@@ -1,26 +1,44 @@
 import React from 'react';
-import { View, Text, TextInput, StyleSheet, Image } from 'react-native';
+import { View, Text, TextInput, StyleSheet, Image, Modal } from 'react-native';
+
+import Profile from '@utils/db/Profile';
 
 import * as vars from '@base/variables'
 import BasicButton from '@components/BasicButton';
+import { NewTeam } from './NewTeam';
+import { BasicHeader } from '@components/BasicHeader';
+import { navigate } from '@base/src/RootNavigation';
 
 export class Dashboard extends React.Component {
 
-  state: any = {}
+  /** 
+   * Tracks whether or not component is mounted to
+   * ensure setState() isn't call while unmounted
+   */
+  _isMounted: boolean = false
+
+  state: any = {
+
+  }
 
   componentDidMount(): any {
-    console.log('dashboard rendering');
+    this._isMounted = true;
+    // Profile.dbProfile().then(res => console.log(res)).catch(err => console.log('Error getting profile:', err));
+  }
+
+  componentWillUnmount(): any {
+    this._isMounted = false;
   }
 
   render(): any {
     return (
       <View style={[vars.screenView, styles.dashboardView]}>
-        {/* <Text>Dashboard Renders</Text> */}
+        <BasicHeader title="Your Teams"/>
         <View style={styles.dashboardCards}>
           <View style={styles.dashboardCard}>
             <Text style={styles.cardTitle}>No Teams</Text>
           </View>
-          <BasicButton title="Create a Team" onPress={null} style={styles.newTeamButton}/>
+          <BasicButton title="Create a Team" onPress={() => navigate('NewTeam', null)} style={styles.newTeamButton}/>
         </View>
       </View>
     )
@@ -37,7 +55,6 @@ const styles = StyleSheet.create({
     // backgroundColor: '#D5DAE2'
   },
   newTeamButton: {
-    color: 'pink',
     backgroundColor: vars.primaryColor,
   },
 
@@ -60,13 +77,22 @@ const styles = StyleSheet.create({
   dashboardCard: {
     width: '80%',
     // backgroundColor: vars.lightColor,
-    // backgroundColor: '#fff',
+    backgroundColor: '#fff',
     // backgroundColor: vars.primaryColor,
     borderRadius: 16,
     height: 100,
     marginBottom: 16,
     alignItems: 'center',
-    justifyContent: 'center'
+    justifyContent: 'center',
+    shadowColor: "#000",
+    shadowOffset: {
+      width: 0,
+      height: 1,
+    },
+    shadowOpacity: 0.22,
+    shadowRadius: 2.22,
+    
+    elevation: 3,
   }
 
 })
