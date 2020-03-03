@@ -2,16 +2,15 @@ import React from 'react';
 import { TextInput, Text, View, StyleSheet, KeyboardAvoidingView } from 'react-native';
 import { primaryColor } from '@base/variables';
 
-const BasicTextField = ({ label, value, onChangeText = null, secureTextEntry = false, autoCapitalize = null, returnKeyType, keyboardType }) => {
+const BasicTextField = ({ label, value, containerStyle = null, fieldStyle = null, onChangeText = null, secureTextEntry = false, autoCapitalize = null, returnKeyType = null, keyboardType = null }) => {
 
   let state: any = { text: '' };
 
   return (
-    <View style={styles.containerStyle}>
-
+    <View style={[styles.containerStyle, containerStyle]}>
       <TextInput
         autoCapitalize={autoCapitalize || "sentences"}
-        style={styles.inputStyle}
+        style={[styles.inputStyle, fieldStyle]}
         onChangeText={onChangeText}
         value={value || null}
         secureTextEntry={secureTextEntry}
@@ -46,6 +45,7 @@ const styles: any = StyleSheet.create({
     marginVertical: 5,
     flexDirection: 'column',
     backgroundColor: '#fff3',
+    width: '100%'
   }
 })
 

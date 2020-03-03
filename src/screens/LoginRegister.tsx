@@ -11,7 +11,7 @@ import { Observable } from 'rxjs';
 import { auth, createTimestamp, db } from '@base/src/config';
 
 import Profile from '@utils/db/Profile';
-import { profileConverter } from '@utils/db/converters';
+// import { profileConverter } from '@utils/db/converters';
 
 // import { useNavigation } from '@react-navigation/native';
 
@@ -76,7 +76,7 @@ export class LoginRegister extends React.Component {
     auth.createUserWithEmailAndPassword(email, password).then((res) => {
       let profile = new Profile(res.user.uid, firstName, lastName, username, createTimestamp());
 
-      db.collection('profiles').doc().withConverter(profileConverter).set(profile)
+      db.collection('profiles').doc().withConverter(Profile.profileConverter).set(profile)
         .then(_ => console.log('Profile created'))
         .catch(err => console.log('Error creating profile:', err))
 

@@ -29,11 +29,14 @@ export class NewTeam extends React.Component {
   }
 
   /** Updates a form field value by its index */
-  handleFormUpdate(fieldIndex: number, newValue: any): void {
+  handleFormUpdate(fieldIndex: number, newValue: any, firstForm: boolean = false): void {
+    let formName = firstForm ? 'newTeamForm' : 'playersForm'
+    if (fieldIndex === 2 && !newValue) console.log('fuck', newValue);
     this.setState((prevState: any) => {
-      let formCopy = [...prevState['newTeamForm']];
-      formCopy[fieldIndex] = { ...formCopy[fieldIndex], value: newValue };
-      return ({ ['newTeamForm']: formCopy })
+      let formCopy = [...prevState[formName]];
+      // formCopy[fieldIndex] = { ...formCopy[fieldIndex], value: newValue };
+      formCopy[fieldIndex]['opts']['value'] = newValue
+      return ({ [formName]: formCopy })
     });
   }
 
@@ -42,32 +45,50 @@ export class NewTeam extends React.Component {
   }
 
   nextStep = (): any => {
+    console.log(this.state.newTeamForm[2].opts.value);
     if (this.maxSteps > this.state.step) {
       this.addMinPlayers();
       this.setState((prevState: any) => ({ step: prevState.step + 1 }));
     }
   }
   prevStep = (): any => {
+    console.log(this.state.newTeamForm[2].opts.value);
     if (this.state.step > 1) {
       this.setState((prevState: any) => ({ step: prevState.step - 1 }));
     } 
   }
 
   addMinPlayers = (): void => {
-    let newPlayerCount = this.state.newTeamForm[2].value - this.state.playersForm.length;
-    console.log('newplayercount', newPlayerCount);
+    let newPlayerCount = this.state.newTeamForm[2].opts.value - this.state.playersForm.length;
+    // console.log('newplayercount', newPlayerCount);
     if (newPlayerCount && newPlayerCount > 0) {
       let newPlayers = [];
       for (let i = 0; i < newPlayerCount; i++) {
         newPlayers.push(createFormField('player', 'Player Name', {}));
       }
 
-      console.log('newplayers:', newPlayers)
-
       this.setState((prevState: any) => ({
         playersForm: [...prevState.playersForm, ...newPlayers]
-      }))
+      }));
     }
+  }
+
+  removePlayer = (player: any): void => {
+    if (this.state.playersForm.length > 1) {
+      this.setState((prevState: any) => {
+        let playersForm = [...prevState.playersForm];
+        let playerIndex = prevState.playersForm.indexOf(player);
+  
+        playersForm.splice(playerIndex, 1);
+        return { playersForm };
+      });
+    }
+  }
+  addPlayer = (): void => {
+    this.setState((prevState: any) => {
+      let playersForm = [...prevState.playersForm, createFormField('player', 'Player Name', {})];
+      return { playersForm };
+    });
   }
 
   render() {
@@ -75,11 +96,10 @@ export class NewTeam extends React.Component {
       <View style={[vars.screenView, styles.newTeamView]}>
         <BasicHeader title="New Team" useCloseButton={true}/>
 
-
         <KeyboardAvoidingView style={styles.teamForm} behavior="padding" keyboardVerticalOffset={-100}>
           <ScrollView>
-            { this.state.step === 1 ? 
-                this.state.newTeamForm.map((field: any, index: number) => {
+              <View style={{ display: this.state.step === 1 ? 'flex' : 'none' }}>
+                { this.state.newTeamForm.map((field: any, index: number) => {
                   return (
                     <BasicTextField
                       key={field.key}
@@ -89,27 +109,47 @@ export class NewTeam extends React.Component {
                       keyboardType={field.opts.keyboardType}
                       value={field.opts.value}
                       returnKeyType={field.opts.returnKeyType}
-                      onChangeText={newVal => this.handleFormUpdate(index, newVal) } 
+                      onChangeText={newVal => this.handleFormUpdate(index, newVal, true) } 
                     />
                   );
-                })
-              : this.state.playersForm.map((field: any, index: number) => {
-                return (
-                  <BasicTextField
-                    key={index}
-                    label={field.label}
-                    autoCapitalize={field.opts.autoCapitalize}
-                    keyboardType={field.opts.keyboardType}
-                    secureTextEntry={field.opts.isSecure}
-                    value={field.opts.value}
-                    returnKeyType={field.opts.returnKeyType}
-                    onChangeText={newVal => this.handleFormUpdate(index, newVal) } 
-                  />
-                );
-              })
-            }
+                }) }
+              </View>
+              <View style={{ display: this.state.step !== 1 ? 'flex' : 'none' }}>
+                { this.state.playersForm.map((field: any, index: number) => {
+                  return (
+                    <View style={styles.playerField} key={index}>
+
+                      <TouchableOpacity
+                        disabled={this.state.step === 1} 
+                        onPress={() => this.removePlayer(field)} 
+                        style={styles.removePlayerButton}
+                      >
+                        <Ionicons size={48} name="ios-close" color={vars.primaryColor}/>
+                      </TouchableOpacity>
+
+                      <BasicTextField
+                        key={index}
+                        label={field.label}
+                        containerStyle={{ borderTopLeftRadius: 0, borderBottomLeftRadius: 0 }}
+                        autoCapitalize={field.opts.autoCapitalize}
+                        keyboardType={field.opts.keyboardType}
+                        secureTextEntry={field.opts.isSecure}
+                        value={field.opts.value}
+                        returnKeyType={field.opts.returnKeyType}
+                        onChangeText={newVal => this.handleFormUpdate(index, newVal) } 
+                      />
+                    </View>
+                  );
+                }) }
+              </View>
           </ScrollView>
         </KeyboardAvoidingView>
+
+        { this.state.step === 2 ? <View style={styles.actions}>
+
+          <BasicButton title="Add Player" style={styles.continueButton} textStyle={styles.continueButtonText} onPress={() => this.addPlayer()}/>
+
+        </View> : null}
 
         <View style={styles.actions}>
           { this.state.step !== 1 ? <TouchableOpacity
@@ -140,6 +180,25 @@ const styles = StyleSheet.create({
     width: '85%',
     alignSelf: 'center',
     flex: 3
+  },
+  playerField: {
+    flexDirection: 'row',
+    // justifyContent: 'space-between',
+    alignItems: 'center'
+  },
+  removePlayerButton: {
+    // flex: 1,
+    // backgroundColor: 'transparent',
+    backgroundColor: '#fff9',
+    textAlign: 'center',
+    justifyContent: 'center',
+    alignItems: 'center',
+    borderWidth: 1,
+    borderColor: 'transparent',
+    paddingHorizontal: 16,
+    height: 60,
+    borderTopLeftRadius: 4,
+    borderBottomLeftRadius: 4
   },
   actions: {
     flex: 1,

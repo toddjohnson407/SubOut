@@ -1,6 +1,5 @@
 import Firebase from 'firebase';
 import { db, createTimestamp, auth } from '../../config';
-import { profileConverter } from './converters';
 
 export default class Profile {
 
@@ -15,12 +14,34 @@ export default class Profile {
   static async dbProfile(id?: string): Promise<any> {
     let profileData;
 
-    if (id) (profileData = await db.collection('profiles').doc(id).withConverter(profileConverter).get());
-    else (profileData = await db.collection('profiles').where('userId', '==', auth.currentUser.uid).limit(1).withConverter(profileConverter).get());
+    if (id) (profileData = await db.collection('profiles').doc(id).withConverter(this.profileConverter).get());
+    else (profileData = await db.collection('profiles').where('userId', '==', auth.currentUser.uid).limit(1).withConverter(this.profileConverter).get());
   
     if (!profileData) return null;
 
     return id ? profileData.data() : profileData.docs[0].data()    
   }
 
+  static profileConverter = {
+    toFirestore: function(profile: Profile) {
+      return {
+        created: this.created, 
+        username: this.username, 
+        firstName: this.firstName, 
+        lastName: this.lastName, 
+        userId: this.userId 
+      }
+    },
+    fromFirestore: function(snapshot, options){
+        const data = snapshot.data(options);
+        return new Profile(
+          data.userId,
+          data.firstName,
+          data.lastName,
+          data.username,
+          data.created,
+        );
+    }
+  }
 }
+
