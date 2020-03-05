@@ -12,6 +12,7 @@ import { Team, TeamPlayer } from '@utils/db/Team';
 
 import { auth, createTimestamp, db } from '@base/src/config';
 import Profile from '@utils/db/Profile';
+import { navigate } from '@base/src/RootNavigation';
 
 export class NewTeam extends React.Component {
 
@@ -125,6 +126,7 @@ export class NewTeam extends React.Component {
         <BasicHeader title="New Team" useCloseButton={true}/>
 
         <KeyboardAvoidingView style={styles.teamForm} behavior="padding" keyboardVerticalOffset={-100}>
+
           <ScrollView>
               <View style={{ display: this.state.step === 1 ? 'flex' : 'none' }}>
                 { this.state.newTeamForm.map((field: any, index: number) => {
@@ -175,7 +177,6 @@ export class NewTeam extends React.Component {
                     onChangeText={newPlayerName => this.setState({ newPlayerName }) } 
                   />
                 </View>
-
               </View>
           </ScrollView>
         </KeyboardAvoidingView>

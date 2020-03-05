@@ -9,7 +9,7 @@ import { Ionicons, Foundation, MaterialIcons, MaterialCommunityIcons, Entypo, Fo
 import { auth } from '@base/src/config';
 
 import { LoginRegister } from '@screens/LoginRegister';
-import { Dashboard, NewTeam, Settings } from '@screens/MainScreens';
+import { Dashboard, NewTeam, Settings, ViewTeam } from '@screens/MainScreens';
 
 import { NavigationContainer } from '@react-navigation/native';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
@@ -17,61 +17,10 @@ import { createStackNavigator, CardStyleInterpolators } from '@react-navigation/
 
 import * as vars from '@base/variables'
 import { navigationRef } from './src/RootNavigation';
+import { LinearGradient } from 'expo-linear-gradient';
 
 const Stack = createStackNavigator();
 const Tab = createBottomTabNavigator();
-
-function MainApp() {
-  return (
-    <Tab.Navigator
-      tabBarOptions={{
-        activeTintColor: '#ffff',
-        inactiveTintColor: '#94ecfc',
-        size: 30,
-        initialRouteName: 'Dashboard',
-        showLabel: false,
-        style: {
-          backgroundColor: primaryColor + 'ff',
-          paddingTop: 12,
-        }
-      }}
-    >
-      <Tab.Screen name="Dashboard" component={Dashboard} 
-        options={{
-          tabBarIcon: ({ color, size }) => {
-            return (
-              <View>
-                <MaterialCommunityIcons size={size} color={color} name="view-dashboard"/>
-              </View>
-            )
-          }
-        }}
-      />
-      <Tab.Screen name="NewTeam" component={NewTeam} 
-        options={{
-          tabBarIcon: ({ color, size }) => {
-            return (
-              <View>
-                <MaterialCommunityIcons size={size} color={color} name="target"/>
-              </View>
-            )
-          }
-        }}
-      />
-      <Tab.Screen name="Settings" component={Settings} 
-        options={{
-          tabBarIcon: ({ color, size }) => {
-            return (
-              <View>
-                <FontAwesome size={size} color={color} name="book"/>
-              </View>
-            )
-          }
-        }}
-      />
-    </Tab.Navigator>
-  );
-}
 
 function MainContainer() {
   return (
@@ -79,6 +28,14 @@ function MainContainer() {
       <Stack.Navigator headerMode="none">
         <Stack.Screen name="Dashboard" component={Dashboard}/>
         <Stack.Screen name="Settings" component={Settings}/>
+        <Stack.Screen name="ViewTeam" component={ViewTeam}
+          options={{
+            mode: 'modal',
+            cardOverlayEnabled: true,
+            cardStyleInterpolator: CardStyleInterpolators.forVerticalIOS,
+            cardStyle: { backgroundColor: 'transparent', height: 500 }
+          }}
+        />
         <Stack.Screen name="NewTeam" component={NewTeam}
           options={{
             cardStyleInterpolator: CardStyleInterpolators.forVerticalIOS
@@ -117,20 +74,11 @@ export default class App extends React.Component {
 
   render() {
     return (
-      <KeyboardAvoidingView behavior="padding" style={[vars.screenView]} keyboardVerticalOffset={-50}>
+      <View style={[vars.screenView]}>
         { this.state.fontsLoaded && this.state.loggedIn !== null ? ( 
           this.state.loggedIn ? (<MainContainer/>) : (<LoginRegister/>)
         ) : null }
-      </KeyboardAvoidingView>
+      </View>
     )
   }
 }
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: '#fff',
-    alignItems: 'center',
-    justifyContent: 'center',
-  }
-});

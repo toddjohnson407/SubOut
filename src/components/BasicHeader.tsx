@@ -38,7 +38,9 @@ export const BasicHeader = ({ title, useBackButton = false, useCloseButton = fal
 const styles = StyleSheet.create({
   headerStyle: {
     height: 200,
-    backgroundColor: vars.primaryColor,
+    // backgroundColor: vars.primaryColor,
+    // backgroundColor: vars.bgColor,
+    backgroundColor: 'transparent',
     justifyContent: 'center',
     paddingTop: 12
     // backgroundColor: 'black',
@@ -60,37 +62,4 @@ const styles = StyleSheet.create({
     marginLeft: 24,
     marginTop: 24
   }
-
-
-
-
-  // layout: {
-  //   height: 200,
-  //   backgroundColor: 'white',
-  //   flexDirection: 'row',
-  //   alignItems: 'center',
-  //   width: '100%',
-  // },
-  // title: {
-  //   width: '90%',
-  //   fontSize: 50,
-  //   marginLeft: 24,
-  //   // fontFamily: 'roboto-regular',
-  //   // letterSpacing: 1,
-  //   fontFamily: 'questrial',
-  //   color: 'black'
-  // },
-  // bottomLayout: {
-  //   width: '100%',
-  //   paddingTop: 24,
-  //   alignItems: 'flex-start'
-  // },
-  // topLayout: {
-  //   // flex: 1,
-  //   width: '100%',
-  //   backgroundColor: 'purple',
-  //   flexDirection: 'row',
-  //   alignItems: 'center',
-  //   justifyContent: 'space-between',
-  // },
 })

@@ -12,7 +12,7 @@ export default class Profile {
     public id: string = null
   ) { }
 
-  static async dbProfile(id?: string): Promise<any> {
+  static async dbProfile(id?: string): Promise<Profile> {
     let profileData;
 
     if (id) (profileData = await db.collection('profiles').doc(id).withConverter(this.profileConverter).get());

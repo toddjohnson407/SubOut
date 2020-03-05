@@ -4,9 +4,7 @@ export class TeamPlayer {
   constructor(
     public name: string,
     public position: string = null
-  ) {
-
-  }
+  ) { }
 }
 
 export class Team {
@@ -21,8 +19,13 @@ export class Team {
     public subFrequency: number,
     public id: string = null,
     public sport: string = null,
-  ) {
-    // if (this.players instanceof )
+  ) { }
+
+  /** Returns all Teams from the db for the active Profile */
+  static allTeams(profileId: string): Promise<Team[] | { message: string, error: string }> {
+    return db.collection('teams').where('profileId', '==', profileId).withConverter(this.teamConverter).get()
+      .then(({docs}) => docs.map((doc) => doc.data()))
+      .catch((error: any) => ({ message: 'Error getting all Teams for Profile:', error }));
   }
 
   static teamConverter = {
@@ -44,7 +47,7 @@ export class Team {
         return new Team(
           data.profileId,
           data.title, 
-          data.players,
+          data.players.map(({name, position}) => new TeamPlayer(name, position)),
           data.gameDuration,
           data.playersOnField,
           data.playersPerSub,
@@ -53,25 +56,5 @@ export class Team {
         );
     }
   }
-
-  // get dbFormat(): any {
-  //   return {
-  //     profileId: this.profileId,
-  //     title: this.title, 
-  //     players: this.players,
-  //     gameDuration: this.gameDuration,
-  //     playersOnField: this.playersOnField,
-  //     playersPerSub: this.playersPerSub,
-  //     subFrequency: this.subFrequency,
-  //     sport: this.sport
-  //   };
-  // }
-
-  // createTeam(): void {
-  //   db.collection('teams').doc().set(this.dbFormat).then(res => {
-  //     console.log('Team created');
-  //     console.log('New team res:', res);
-  //   }).catch(err => console.log('Error creating team:', err));
-  // }
 
 }

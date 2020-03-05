@@ -1,6 +1,7 @@
 /* This file stores style variables and layouts that are used throughout the application */
 import * as Font from 'expo-font';
 import { Dimensions } from 'react-native';
+import { LinearGradient } from 'expo-linear-gradient';
 
 const fonts: {[name: string]: Font.FontSource;} = {
   'open-sans-bold': require('./assets/fonts/OpenSans-Bold.ttf'),
@@ -39,15 +40,9 @@ const fonts: {[name: string]: Font.FontSource;} = {
   'hind-bold': require('./assets/fonts/Hind-Bold.ttf'),
 }
 
-const primaryColor: any = '#5CD391';
-
-// const primaryColor: any = '#0cafcc';
-// const primaryColor: any = '#0C5E5A';
-// const primaryColor: any = '#DCC040';
-// const primaryColor: any = '#17416A';
-// const primaryColor: any = '#A1C5BD';
-// const primaryColor: any = '#FF6A47';
-// const lightColor: any = '#fc7c5f';
+const primaryColor: string = '#5CD391';
+// const bgColor: string = '#204362';
+const bgColor: string = '#363C4E';
 
 const headerFont: string = 'hind-bold';
 // const headerFont: string = 'source-sans-black';
@@ -60,9 +55,19 @@ const bodyText: any = {
 
 const screenView: any = {
   flex: 1,
-  height: '100%',
-  // height: Dimensions.get('screen').height,
-  backgroundColor: '#fff',
+  height: Dimensions.get('screen').height,
+  // backgroundColor: '#fff0'
+}
+
+const cardElevation: any = {
+  shadowColor: "#000",
+  shadowOffset: {
+    width: 0,
+    height: 1,
+  },
+  shadowOpacity: 0.22,
+  shadowRadius: 2.22,
+  elevation: 3,
 }
 
 const defaultNavigationOptions: any = {
@@ -72,12 +77,8 @@ const defaultNavigationOptions: any = {
   headerTitleStyle: {
     fontFamily: 'roboto-bold',
     fontSize: 20
-  },
-  headerStyle: {
-    backgroundColor: primaryColor,
   }
 }
-
 
 export { 
   primaryColor,
@@ -85,6 +86,7 @@ export {
   fonts,
   screenView,
   defaultNavigationOptions,
-  // lightColor,
-  headerFont
+  cardElevation,
+  headerFont,
+  bgColor,
 }

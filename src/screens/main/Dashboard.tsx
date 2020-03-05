@@ -8,6 +8,12 @@ import BasicButton from '@components/BasicButton';
 import { NewTeam } from './NewTeam';
 import { BasicHeader } from '@components/BasicHeader';
 import { navigate } from '@base/src/RootNavigation';
+import { Team } from '@utils/db/Team';
+import { LinearGradient } from 'expo-linear-gradient';
+import { MaterialCommunityIcons } from '@expo/vector-icons';
+import { ScrollView } from 'react-native-gesture-handler';
+
+import DarkGradient from '@components/DarkGradient';
 
 export class Dashboard extends React.Component {
 
@@ -18,12 +24,18 @@ export class Dashboard extends React.Component {
   _isMounted: boolean = false
 
   state: any = {
-
+    teams: [],
+    teamsLoaded: false
   }
 
   componentDidMount(): any {
     this._isMounted = true;
-    // Profile.dbProfile().then(res => console.log(res)).catch(err => console.log('Error getting profile:', err));
+    Profile.dbProfile().then((profile: Profile) => profile.id)
+      .then((profileId: string) => Team.allTeams(profileId))
+      .then((teams: Team[]) => {
+        if (teams && teams instanceof Array) this.setState({ teams: [...teams, ...teams, ...teams, ...teams, ...teams] });
+        this.setState({ teamsLoaded: true })
+      }).catch(err => console.log('Error getting profile:', err));
   }
 
   componentWillUnmount(): any {
@@ -34,12 +46,24 @@ export class Dashboard extends React.Component {
     return (
       <View style={[vars.screenView, styles.dashboardView]}>
         <BasicHeader title="Your Teams"/>
-        <View style={styles.dashboardCards}>
-          <View style={styles.dashboardCard}>
-            <Text style={styles.cardTitle}>No Teams</Text>
-          </View>
-          <BasicButton title="Create a Team" onPress={() => navigate('NewTeam', null)} style={styles.newTeamButton}/>
-        </View>
+        <BasicButton title="View Team Test" onPress={() => navigate('ViewTeam', null)}  />
+
+        <ScrollView>
+          { this.state.teamsLoaded ? <View style={styles.dashboardCards}>
+
+            { this.state.teams.length ? this.state.teams.map((team: Team, index: number) => (
+              <View style={styles.dashboardCard} key={index}>
+                <MaterialCommunityIcons color="white" size={30} name="soccer" style={styles.cardIcon}/>
+                <View style={styles.cardContent}>
+                  <Text style={styles.cardTitle}>{team.title}</Text>
+                  <Text style={styles.cardSubtitle}>{team.players.length} Players</Text>
+                </View>
+              </View>
+            )) : <View><Text style={styles.cardTitle}>No Teams</Text></View> }
+
+          </View> : null }
+        </ScrollView>
+        <DarkGradient/>
       </View>
     )
   }
@@ -50,49 +74,58 @@ const styles = StyleSheet.create({
 
   dashboardView: {
     // backgroundColor: 'black',
-    // backgroundColor: vars.primaryColor
+    // backgroundColor: vars.bgColor
     // backgroundColor: '#D2D2D4'
     // backgroundColor: '#D5DAE2'
   },
   newTeamButton: {
-    backgroundColor: vars.primaryColor,
+    // backgroundColor: vars.primaryColor,
   },
 
   dashboardCards: {
     marginTop: 32,
     flex: 1,
     alignItems: 'center',
-    backgroundColor: '#fff',
     // backgroundColor: vars.primaryColor,
-    marginHorizontal: 16,
-    borderTopLeftRadius: 16,
-    borderTopRightRadius: 16,
+    // marginHorizontal: 16,
+    // borderTopLeftRadius: 16,
+    // borderTopRightRadius: 16,
   },
 
   cardTitle: {
-    fontFamily: 'roboto-medium',
-    fontSize: 32
+    // fontFamily: 'roboto-medium',
+    fontFamily: 'roboto-bold',
+    fontSize: 22,
+    color: '#fff',
+    // marginLeft: 20
+
   },
+  cardSubtitle: {
+    fontFamily: 'roboto-light',
+    fontSize: 16,
+    color: '#fff',
+    // marginLeft: 20
+  },
+  // '[cardTitle, cardSubtitle]': {
+    // marginLeft: 20
+  // },
 
   dashboardCard: {
-    width: '80%',
-    // backgroundColor: vars.lightColor,
-    backgroundColor: '#fff',
-    // backgroundColor: vars.primaryColor,
-    borderRadius: 16,
-    height: 100,
+    width: '90%',
+    backgroundColor: '#4f677a80',
+    borderRadius: 8,
+    // height: 100,
+    paddingVertical: 25, 
     marginBottom: 16,
+    flexDirection: 'row',
     alignItems: 'center',
-    justifyContent: 'center',
-    shadowColor: "#000",
-    shadowOffset: {
-      width: 0,
-      height: 1,
-    },
-    shadowOpacity: 0.22,
-    shadowRadius: 2.22,
-    
-    elevation: 3,
+    ...vars.cardElevation
+  },
+  cardContent: {
+    marginLeft: 20
+  },
+  cardIcon: {
+    marginLeft: 20
   }
 
 })
