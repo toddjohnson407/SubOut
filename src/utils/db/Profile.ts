@@ -8,7 +8,8 @@ export default class Profile {
     public firstName: string,
     public lastName: string,
     public username: string,
-    public created: Firebase.firestore.Timestamp | Date = createTimestamp()
+    public created: Firebase.firestore.Timestamp | Date = createTimestamp(),
+    public id: string = null
   ) { }
 
   static async dbProfile(id?: string): Promise<any> {
@@ -40,6 +41,7 @@ export default class Profile {
           data.lastName,
           data.username,
           data.created,
+          snapshot.id
         );
     }
   }

@@ -1,6 +1,6 @@
 import { db, auth, storage, createTimestamp } from '../../config';
 
-class TeamPlayer {
+export class TeamPlayer {
   constructor(
     public name: string,
     public position: string = null
@@ -9,7 +9,7 @@ class TeamPlayer {
   }
 }
 
-export default class Team {
+export class Team {
 
   constructor(
     public profileId: any,
@@ -22,15 +22,16 @@ export default class Team {
     public id: string = null,
     public sport: string = null,
   ) {
-
+    // if (this.players instanceof )
   }
 
   static teamConverter = {
     toFirestore: function(team: Team) {
+      let convPlayers = team.players.map(player => ({ name: player.name, position: null })) as Array<any>;
       return {
         profileId: team.profileId,
         title: team.title, 
-        players: team.players,
+        players: convPlayers,
         gameDuration: team.gameDuration,
         playersOnField: team.playersOnField,
         playersPerSub: team.playersPerSub,

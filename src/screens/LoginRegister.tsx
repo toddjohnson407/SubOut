@@ -11,9 +11,6 @@ import { Observable } from 'rxjs';
 import { auth, createTimestamp, db } from '@base/src/config';
 
 import Profile from '@utils/db/Profile';
-// import { profileConverter } from '@utils/db/converters';
-
-// import { useNavigation } from '@react-navigation/native';
 
 export class LoginRegister extends React.Component {
 
