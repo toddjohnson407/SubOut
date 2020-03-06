@@ -13,7 +13,7 @@ import { Dashboard, NewTeam, Settings, ViewTeam } from '@screens/MainScreens';
 
 import { NavigationContainer } from '@react-navigation/native';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
-import { createStackNavigator, CardStyleInterpolators } from '@react-navigation/stack';
+import { createStackNavigator, CardStyleInterpolators, TransitionPresets } from '@react-navigation/stack';
 
 import * as vars from '@base/variables'
 import { navigationRef } from './src/RootNavigation';
@@ -33,7 +33,11 @@ function MainContainer() {
             mode: 'modal',
             cardOverlayEnabled: true,
             cardStyleInterpolator: CardStyleInterpolators.forVerticalIOS,
-            cardStyle: { backgroundColor: 'transparent', height: 500 }
+            // cardStyleInterpolator: CardStyleInterpolators.forModalPresentationIOS,
+            gestureDirection: 'vertical',
+            gestureResponseDistance: { vertical: 1000 },
+            cardStyle: { backgroundColor: 'transparent' },
+            // ...TransitionPresets.ModalPresentationIOS,
           }}
         />
         <Stack.Screen name="NewTeam" component={NewTeam}

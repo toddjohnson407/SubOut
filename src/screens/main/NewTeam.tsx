@@ -46,13 +46,16 @@ export class NewTeam extends React.Component {
     });
   }
 
-  async componentDidMount() {
+  componentDidMount() {
 
   }
 
 
   nextStep = (): any => {
     if (this.maxSteps > this.state.step) {
+      let plyrs = ['Jack', 'Jake', 'Josh', 'Ian', 'Ryland', 'Gabriele', 'Johnny', 'Timbo'];
+      this.setState({ players: plyrs });
+      console.log(this.state.players);
       this.setState((prevState: any) => ({ step: prevState.step + 1 }));
     } else {
       this.createTeam();
@@ -92,10 +95,15 @@ export class NewTeam extends React.Component {
   /** Sends newly created team to database */
   createTeam = async (): Promise<void> => {
     if (this.isValid()) {
-      this.createTestTeam()
-      // let teamPlayers: TeamPlayer[] = this.state.players.map(player => new TeamPlayer(player));
-      // let profile = await Profile.dbProfile();
-      // let newTeam = new Team(profile.id, this.state.newTeamForm[0].value, teamPlayers, this.state.newTeamForm[1].value, this.state.newTeamForm[2].value, this.state.newTeamForm[3], this.state.newTeamForm[4]);
+      // this.createTestTeam()
+      let teamPlayers: TeamPlayer[] = this.state.players.map((player: string) => new TeamPlayer(player));
+      let profile = await Profile.dbProfile();
+      let newTeam = new Team(profile.id, this.state.newTeamForm[0].opts.value, teamPlayers, +this.state.newTeamForm[1].opts.value, +this.state.newTeamForm[2].opts.value, +this.state.newTeamForm[3].opts.value, +this.state.newTeamForm[4].opts.value);
+
+      db.collection('teams').doc().withConverter(Team.teamConverter).withConverter(Team.teamConverter).set(newTeam)
+        .then(_ => navigate('Dashboard'))
+        .catch(err => console.log('Error creating test team:', err))
+
     }
   }
 

@@ -1,5 +1,5 @@
 import React from 'react';
-import { View, Text, TextInput, StyleSheet, Image, Modal } from 'react-native';
+import { View, Text, TextInput, StyleSheet, Image, Modal, TouchableOpacity } from 'react-native';
 
 import Profile from '@utils/db/Profile';
 
@@ -33,7 +33,7 @@ export class Dashboard extends React.Component {
     Profile.dbProfile().then((profile: Profile) => profile.id)
       .then((profileId: string) => Team.allTeams(profileId))
       .then((teams: Team[]) => {
-        if (teams && teams instanceof Array) this.setState({ teams: [...teams, ...teams, ...teams, ...teams, ...teams] });
+        if (teams && teams instanceof Array) this.setState({ teams: teams });
         this.setState({ teamsLoaded: true })
       }).catch(err => console.log('Error getting profile:', err));
   }
@@ -46,20 +46,21 @@ export class Dashboard extends React.Component {
     return (
       <View style={[vars.screenView, styles.dashboardView]}>
         <BasicHeader title="Your Teams"/>
-        <BasicButton title="View Team Test" onPress={() => navigate('ViewTeam', null)}  />
 
         <ScrollView>
           { this.state.teamsLoaded ? <View style={styles.dashboardCards}>
 
             { this.state.teams.length ? this.state.teams.map((team: Team, index: number) => (
-              <View style={styles.dashboardCard} key={index}>
-                <MaterialCommunityIcons color="white" size={30} name="soccer" style={styles.cardIcon}/>
-                <View style={styles.cardContent}>
-                  <Text style={styles.cardTitle}>{team.title}</Text>
-                  <Text style={styles.cardSubtitle}>{team.players.length} Players</Text>
+              <TouchableOpacity onPress={() => navigate('ViewTeam', { team })} style={styles.dashboardCard} key={index}>
+                {/* <View style={styles.dashboardCard} key={index}> */}
+                  <MaterialCommunityIcons color="white" size={30} name="soccer" style={styles.cardIcon}/>
+                  <View style={styles.cardContent}>
+                    <Text style={styles.cardTitle}>{team.title}</Text>
+                    <Text style={styles.cardSubtitle}>{team.players.length} Players</Text>
+                  {/* </View> */}
                 </View>
-              </View>
-            )) : <View><Text style={styles.cardTitle}>No Teams</Text></View> }
+              </TouchableOpacity>
+              )) : <View><Text style={styles.cardTitle}>No Teams</Text></View> }
 
           </View> : null }
         </ScrollView>

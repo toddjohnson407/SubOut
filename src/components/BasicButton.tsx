@@ -5,7 +5,6 @@ import { LinearGradient } from 'expo-linear-gradient';
 import { primaryColor, headerFont } from '@base/variables';
 
 const BasicButton = ({ title, onPress, style = null, textStyle = null }) => {
-  console.log('ldksjfdsklf', title);
   return (
     // <LinearGradient 
     //   start={[0.0, 0.0]}
