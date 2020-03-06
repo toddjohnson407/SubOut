@@ -51,13 +51,11 @@ export class Dashboard extends React.Component {
           { this.state.teamsLoaded ? <View style={styles.dashboardCards}>
 
             { this.state.teams.length ? this.state.teams.map((team: Team, index: number) => (
-              <TouchableOpacity onPress={() => navigate('ViewTeam', { team })} style={styles.dashboardCard} key={index}>
-                {/* <View style={styles.dashboardCard} key={index}> */}
-                  <MaterialCommunityIcons color="white" size={30} name="soccer" style={styles.cardIcon}/>
-                  <View style={styles.cardContent}>
-                    <Text style={styles.cardTitle}>{team.title}</Text>
-                    <Text style={styles.cardSubtitle}>{team.players.length} Players</Text>
-                  {/* </View> */}
+              <TouchableOpacity onPress={() => navigate('ViewTeamModal', { team })} style={styles.dashboardCard} key={index}>
+                <MaterialCommunityIcons color="white" size={30} name="soccer" style={styles.cardIcon}/>
+                <View style={styles.cardContent}>
+                  <Text style={styles.cardTitle}>{team.title}</Text>
+                  <Text style={styles.cardSubtitle}>{team.players.length} Players</Text>
                 </View>
               </TouchableOpacity>
               )) : <View><Text style={styles.cardTitle}>No Teams</Text></View> }

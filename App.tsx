@@ -9,7 +9,7 @@ import { Ionicons, Foundation, MaterialIcons, MaterialCommunityIcons, Entypo, Fo
 import { auth } from '@base/src/config';
 
 import { LoginRegister } from '@screens/LoginRegister';
-import { Dashboard, NewTeam, Settings, ViewTeam } from '@screens/MainScreens';
+import { Dashboard, NewTeam, Settings, ViewTeam, ViewTeamModal } from '@screens/MainScreens';
 
 import { NavigationContainer } from '@react-navigation/native';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
@@ -18,6 +18,7 @@ import { createStackNavigator, CardStyleInterpolators, TransitionPresets } from 
 import * as vars from '@base/variables'
 import { navigationRef } from './src/RootNavigation';
 import { LinearGradient } from 'expo-linear-gradient';
+import { SelectTeam } from '@screens/main/SelectTeam';
 
 const Stack = createStackNavigator();
 const Tab = createBottomTabNavigator();
@@ -28,7 +29,14 @@ function MainContainer() {
       <Stack.Navigator headerMode="none">
         <Stack.Screen name="Dashboard" component={Dashboard}/>
         <Stack.Screen name="Settings" component={Settings}/>
-        <Stack.Screen name="ViewTeam" component={ViewTeam}
+        <Stack.Screen name="ViewTeam" component={ViewTeam}/>
+        <Stack.Screen name="SelectTeam" component={SelectTeam}
+          options={{
+            cardStyleInterpolator: CardStyleInterpolators.forVerticalIOS,
+            gestureDirection: 'vertical-inverted'
+          }}
+        />
+        <Stack.Screen name="ViewTeamModal" component={ViewTeamModal}
           options={{
             mode: 'modal',
             cardOverlayEnabled: true,

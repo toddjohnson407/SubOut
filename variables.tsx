@@ -40,6 +40,14 @@ const fonts: {[name: string]: Font.FontSource;} = {
   'hind-bold': require('./assets/fonts/Hind-Bold.ttf'),
 }
 
+const colors: string[] = [
+  '#6A7FDB',
+  '#57E2E5',
+  '#45CB85',
+  '#153131',
+  '#E08DAC',
+];
+
 const primaryColor: string = '#5CD391';
 // const bgColor: string = '#204362';
 const bgColor: string = '#363C4E';
@@ -89,4 +97,5 @@ export {
   cardElevation,
   headerFont,
   bgColor,
+  colors
 }

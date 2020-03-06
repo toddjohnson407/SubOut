@@ -1,70 +1,44 @@
 import React from 'react';
-import { View, Text, TextInput, StyleSheet, Image } from 'react-native';
+import { View, Text, TextInput, StyleSheet, Image, Modal, TouchableOpacity } from 'react-native';
+
+import Profile from '@utils/db/Profile';
 
 import * as vars from '@base/variables'
 import BasicButton from '@components/BasicButton';
+import { TeamHeader } from '@components/TeamHeader';
+import { NewTeam } from './NewTeam';
 import { BasicHeader } from '@components/BasicHeader';
-import { auth } from '@base/src/config';
+import { navigate } from '@base/src/RootNavigation';
+import { Team } from '@utils/db/Team';
+import { LinearGradient } from 'expo-linear-gradient';
+import { MaterialCommunityIcons } from '@expo/vector-icons';
+import { ScrollView } from 'react-native-gesture-handler';
+
+import DarkGradient from '@components/DarkGradient';
 
 export class ViewTeam extends React.Component {
 
-  state: any = {}
+  state: any = {
+    currentTeam: null,
+    allTeams: null
+  }
   props: any;
 
-  componentDidMount(): any {
-    console.log(this.props);
-    console.log('View Team Dialog');
+  componentDidMount(): void {
+    let { team } = this.props.route.params;
+    this.setState({ currentTeam: team });
   }
 
   render(): any {
+
     let { team } = this.props.route.params;
     return (
-      <View style={styles.teamView}>
-        {/* <BasicHeader title="Your Account" useBackButton={true}/> */}
-        <View style={styles.teamContainer}>
-          <Text style={{ fontSize: 34, color: vars.bgColor, fontFamily: vars.headerFont, marginTop: 16 }}>{team.title}</Text>
-          {/* <View style={styles.buttonContainer}> */}
-
-            <BasicButton title="New Game" onPress={() => null} style={styles.newGameButton} textStyle={{color: '#fff', fontFamily: vars.headerFont}}/>
-          {/* </View> */}
-        </View>
+      <View style={[vars.screenView]}>
+        <TeamHeader team={team}/>
+        <DarkGradient/>
       </View>
+
     )
   }
 
 }
-
-const styles = StyleSheet.create({
-  teamView: {
-    // backgroundColor: 'purple',
-    flex: 1,
-    justifyContent: 'flex-end'
-  },
-  teamContainer: {
-    height: 300,
-    backgroundColor: 'white',
-    // justifyContent: 'flex-start',
-    justifyContent: 'space-between',
-    alignItems: 'center',
-    borderTopLeftRadius: 16,
-    borderTopRightRadius: 16,
-    // flex: 1
-  },
-  logoutButton: {
-    backgroundColor: vars.primaryColor
-  },
-  // buttonContainer: {
-  //   backgroundColor: vars.bgColor,
-  //   width: '100%'
-  // },
-  newGameButton: {
-    borderWidth: 0,
-    backgroundColor: vars.bgColor,
-    borderRadius: 8,
-    marginBottom: 16,
-    // paddingHorizontal: 46,
-    width: '80%',
-    ...vars.cardElevation
-  }
-})
-
