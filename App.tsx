@@ -33,7 +33,9 @@ function MainContainer() {
         <Stack.Screen name="SelectTeam" component={SelectTeam}
           options={{
             cardStyleInterpolator: CardStyleInterpolators.forVerticalIOS,
-            gestureDirection: 'vertical-inverted'
+            gestureDirection: 'vertical-inverted',
+            cardStyle: { backgroundColor: 'transparent' },
+
           }}
         />
         <Stack.Screen name="ViewTeamModal" component={ViewTeamModal}

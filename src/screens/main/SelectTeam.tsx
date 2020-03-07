@@ -1,5 +1,5 @@
 import React from 'react';
-import { View, Text, TextInput, StyleSheet, Image, Modal, TouchableOpacity } from 'react-native';
+import { View, Text, TextInput, StyleSheet, Image, Modal, TouchableOpacity, Dimensions } from 'react-native';
 
 import Profile from '@utils/db/Profile';
 
@@ -16,6 +16,7 @@ import { ScrollView } from 'react-native-gesture-handler';
 
 import DarkGradient from '@components/DarkGradient';
 import { SafeAreaView } from 'react-native-safe-area-context';
+import { BlurView } from 'expo-blur';
 
 export class SelectTeam extends React.Component {
 
@@ -31,55 +32,42 @@ export class SelectTeam extends React.Component {
   }
 
   componentDidMount(): void {
-    let { team } = this.props.route.params;
-    this.setState({ currentTeam: team });
-
-    Profile.dbProfile().then((profile: Profile) => profile.id)
-      .then((profileId: string) => Team.allTeams(profileId))
-      .then((teams: Team[]) => {
-        console.log(teams.length)
-        console.log('All Teams');
-        if (teams && teams instanceof Array) this.setState({ allTeams: teams });
-        this.setState({ teamsLoaded: true })
-      }).catch(err => console.log('Error getting profile:', err));
-    console.log(this.props.route.params);
-    console.log('View Team Full Screen');
+    let { currentTeam, allTeams } = this.props.route.params;
+    this.setState({ currentTeam, allTeams });
+    // this.setState({ currentTeam, allTeams: [...allTeams, ...allTeams] });
   }
 
   render(): any {
 
-    let { team } = this.props.route.params;
+    let { currentTeam: team } = this.props.route.params;
     return (
+
       <SafeAreaView style={[vars.screenView, styles.selectTeamView]}>
-        <View style={styles.teamContainer}>
-          <Text style={styles.teamText}>Your Teams</Text>
+        <View style={styles.teamSelectHeader}>
+          <Text style={styles.teamText}>All Teams</Text>
         </View>
 
-        <ScrollView style={[{ maxHeight: this.state.allTeams ? this.state.allTeams.length * 100 : 0 }]}>
-          { this.state.allTeams ? this.state.allTeams.map((team: Team, index: number) => (
-            // <TouchableOpacity style={[styles.teamContainer, {backgroundColor: vars.colors[index]}]} onPress={() => navigate('ViewTeam', { team })}>
-            //   <Text style={styles.teamText}>{team.title}</Text>
-            // </TouchableOpacity>
+        <View style={{ 
+          height: this.state.allTeams ? this.state.allTeams.length * 88 : 0,
+          maxHeight: 420 //blaze it,
+        }}>
+          <ScrollView>
+            { this.state.allTeams ? this.state.allTeams.map((team: Team, index: number) => (
+              <TouchableOpacity onPress={() => navigate('ViewTeam', { team })} style={[styles.dashboardCard]} key={index}>
+                <MaterialCommunityIcons color="white" size={30} name="soccer" style={styles.cardIcon}/>
+                <View style={styles.cardContent}>
+                  <Text style={styles.cardTitle}>{team.title}</Text>
+                  <Text style={styles.cardSubtitle}>{team.players.length} Players</Text>
+                </View>
+              </TouchableOpacity>
+            )) : null }
+          </ScrollView>
+        </View>
 
-            <TouchableOpacity onPress={() => navigate('ViewTeam', { team })} style={[styles.dashboardCard, true && { backgroundColor: vars.colors[index] }]} key={index}>
-              <MaterialCommunityIcons color="white" size={30} name="soccer" style={styles.cardIcon}/>
-              <View style={styles.cardContent}>
-                <Text style={styles.cardTitle}>{team.title}</Text>
-                <Text style={styles.cardSubtitle}>{team.players.length} Players</Text>
-              </View>
-            </TouchableOpacity>
-          )) : null }
-        </ScrollView>
-        {/* <TouchableOpacity style={[styles.teamContainer, {backgroundColor: this.state.allTeams? vars.colors[this.state.allTeams.length] : null}]} onPress={() => navigate('NewTeam')}>
-          <Text style={styles.teamText}>New Team</Text>
-        </TouchableOpacity> */}
-        <TouchableOpacity onPress={() => navigate('NewTeam', null)} style={[styles.dashboardCard, {backgroundColor: this.state.allTeams? vars.colors[this.state.allTeams.length] : null}]}>
-          <Ionicons name="ios-add-circle-outline" color="white" size={30} style={styles.cardIcon}/>
-          <View style={styles.cardContent}>
-            <Text style={styles.cardTitle}>New Team</Text>
-          </View>
-        </TouchableOpacity>
-        <DarkGradient/>
+        <View style={{justifyContent: 'flex-start', marginHorizontal: 16}}>
+          <BasicButton title="New Team" onPress={() => navigate('NewTeam', null)} style={styles.newTeamButton} textStyle={styles.newTeamButtonText}/>
+        </View>
+        {/* <DarkGradient/> */}
       </SafeAreaView>
 
     )
@@ -88,26 +76,49 @@ export class SelectTeam extends React.Component {
 }
 
 const styles = StyleSheet.create({
-  selectTeamView: {
-    backgroundColor: vars.bgColor,
-    justifyContent: 'flex-start'
-  },
-  teamContainer: {
+  newTeamButton: {
+    backgroundColor: vars.primaryColor + 'c0',
+    // backgroundColor: '#4f677a80',
+    borderWidth: 0,
     width: '100%',
-    height: 100,
+    // height: 80,
+    marginTop: 4,
+    alignSelf: 'center',
+    marginBottom: 0,
+  },
+  newTeamButtonText: {
+    // fontFamily: vars.headerFont,
+    fontFamily: 'roboto-light',
+    fontSize: 22
+  },
+  selectTeamView: {
+    // backgroundColor: 'pink',
+    justifyContent: 'center',
+    // padding: 50,
+    // height: 500,
+    // height: Dimensions.get('screen').height / 1.65,
+
+    // alignSelf: 'center',
+  },
+  teamSelectHeader: {
+    width: '100%',
+    // flex: 1,
+    height: 88,
     alignItems: 'center',
     justifyContent: 'center',
+    // backgroundColor: vars.primaryColor
   },
   teamText: {
-    fontSize: 24,
+    fontSize: 34,
     fontFamily: 'roboto-light',
-    color: '#fff'
+    color: '#fff',
+    // fontFamily: vars.headerFont,
+    // color: vars.primaryColor
   },
   cardTitle: {
     fontFamily: 'roboto-light',
     fontSize: 22,
     color: '#fff',
-
   },
   cardSubtitle: {
     fontFamily: 'roboto-light',
@@ -117,13 +128,15 @@ const styles = StyleSheet.create({
 
   dashboardCard: {
     backgroundColor: '#4f677a80',
-    
-    height: 100,
-    // marginBottom: 16,
-    // ...vars.cardElevation,
+    borderRadius: 4,
+    // borderBottomWidth: 1,
+    // borderColor: 'white',
+    marginHorizontal: 16,
+    marginVertical: 4,
+    height: 80,
+    // flex: 1,
     flexDirection: 'row',
     alignItems: 'center',
-    // marginBottom: 2,
   },
   cardContent: {
     marginLeft: 20
