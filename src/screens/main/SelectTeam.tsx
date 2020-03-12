@@ -39,7 +39,7 @@ export class SelectTeam extends React.Component {
 
   render(): any {
 
-    let { currentTeam: team } = this.props.route.params;
+    let { currentTeam: team, allTeams } = this.props.route.params;
     return (
 
       <SafeAreaView style={[vars.screenView, styles.selectTeamView]}>
@@ -53,7 +53,7 @@ export class SelectTeam extends React.Component {
         }}>
           <ScrollView>
             { this.state.allTeams ? this.state.allTeams.map((team: Team, index: number) => (
-              <TouchableOpacity onPress={() => navigate('ViewTeam', { team })} style={[styles.dashboardCard]} key={index}>
+              <TouchableOpacity onPress={() => navigate('ViewTeam', { currentTeam: team, allTeams })} style={[styles.dashboardCard]} key={index}>
                 <MaterialCommunityIcons color="white" size={30} name="soccer" style={styles.cardIcon}/>
                 <View style={styles.cardContent}>
                   <Text style={styles.cardTitle}>{team.title}</Text>

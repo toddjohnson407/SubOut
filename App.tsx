@@ -9,7 +9,7 @@ import { Ionicons, Foundation, MaterialIcons, MaterialCommunityIcons, Entypo, Fo
 import { auth } from '@base/src/config';
 
 import { LoginRegister } from '@screens/LoginRegister';
-import { Dashboard, NewTeam, Settings, ViewTeam, ViewTeamModal } from '@screens/MainScreens';
+import { Dashboard, NewTeam, Settings, ViewTeam, ViewTeamModal, LoadingTeams, ViewRoster } from '@screens/MainScreens';
 
 import { NavigationContainer } from '@react-navigation/native';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
@@ -19,6 +19,7 @@ import * as vars from '@base/variables'
 import { navigationRef } from './src/RootNavigation';
 import { LinearGradient } from 'expo-linear-gradient';
 import { SelectTeam } from '@screens/main/SelectTeam';
+import { DarkGradient } from '@components/MainComponents';
 
 const Stack = createStackNavigator();
 const Tab = createBottomTabNavigator();
@@ -27,18 +28,19 @@ function MainContainer() {
   return (
     <NavigationContainer ref={navigationRef}>
       <Stack.Navigator headerMode="none">
-        <Stack.Screen name="Dashboard" component={Dashboard}/>
+        <Stack.Screen name="LoadingTeams" component={LoadingTeams}/>
+        <Stack.Screen name="ViewTeam" component={ViewTeam} options={{
+          animationEnabled: false
+        }}/>
         <Stack.Screen name="Settings" component={Settings}/>
-        <Stack.Screen name="ViewTeam" component={ViewTeam}/>
         <Stack.Screen name="SelectTeam" component={SelectTeam}
           options={{
             cardStyleInterpolator: CardStyleInterpolators.forVerticalIOS,
             gestureDirection: 'vertical-inverted',
             cardStyle: { backgroundColor: 'transparent' },
-
           }}
-        />
-        <Stack.Screen name="ViewTeamModal" component={ViewTeamModal}
+          />
+        <Stack.Screen name="ViewRoster" component={ViewRoster}
           options={{
             mode: 'modal',
             cardOverlayEnabled: true,
@@ -49,12 +51,13 @@ function MainContainer() {
             cardStyle: { backgroundColor: 'transparent' },
             // ...TransitionPresets.ModalPresentationIOS,
           }}
-        />
+          />
         <Stack.Screen name="NewTeam" component={NewTeam}
           options={{
             cardStyleInterpolator: CardStyleInterpolators.forVerticalIOS
           }}
-        />
+          />
+        {/* <Stack.Screen name="Dashboard" component={Dashboard}/> */}
       </Stack.Navigator>
     </NavigationContainer>
   )

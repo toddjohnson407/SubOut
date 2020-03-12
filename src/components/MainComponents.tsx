@@ -5,5 +5,6 @@ import BasicTextField2 from './BasicTextField2';
 import DarkGradient from './DarkGradient';
 import { ErrorBoundary } from './ErrorBoundary';
 import { TeamHeader } from './TeamHeader';
+import IconButton from './IconButton';
 
-export { BasicButton, BasicHeader, BasicTextField, BasicTextField2, DarkGradient, TeamHeader, ErrorBoundary }
+export { BasicButton, BasicHeader, BasicTextField, BasicTextField2, DarkGradient, TeamHeader, ErrorBoundary, IconButton }
