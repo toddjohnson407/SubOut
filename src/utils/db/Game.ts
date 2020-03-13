@@ -60,6 +60,18 @@ export class Game {
       .catch((error: any) => ({ message: 'Error getting all Teams for Profile:', error }));
   }
 
+  /** Returns all Games from the db by an Array of Team ids */
+  static allGames(teamIds: string[]): Promise<Game[] | { message: string, error: string }> {
+    return db.collection('games').where('teamId', 'in', teamIds).withConverter(this.gameConverter).get()
+      .then(({docs}) => docs.map((doc) => doc.data()))
+      .catch((error: any) => ({ message: 'Error getting all Games for Team[]:', error }));
+  }
+
+  /** Sets the activeGameId attribute of the current Profile */
+  static setActiveGameId(profileId: string, gameId: string): void {
+    db.collection('profiles').doc(profileId).update({ activeGameId: gameId }).then((_: void) => console.log('Active Game Updated'))
+  }
+
   static gameConverter = {
     toFirestore: function(game: Game) {
       game.players.forEach((player: any, index: number) => {

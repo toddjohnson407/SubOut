@@ -21,6 +21,9 @@ import { LinearGradient } from 'expo-linear-gradient';
 import { SelectTeam } from '@screens/main/SelectTeam';
 import { DarkGradient } from '@components/MainComponents';
 
+import { createStore } from 'redux'
+// import { Provider } from 'react-redux';
+
 const Stack = createStackNavigator();
 const Tab = createBottomTabNavigator();
 
@@ -94,6 +97,7 @@ export default class App extends React.Component {
 
   render() {
     return (
+      // <Provider
       <View style={[vars.screenView]}>
         { this.state.fontsLoaded && this.state.loggedIn !== null ? ( 
           this.state.loggedIn ? (<MainContainer/>) : (<LoginRegister/>)

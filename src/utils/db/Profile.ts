@@ -9,7 +9,8 @@ export default class Profile {
     public lastName: string,
     public username: string,
     public created: Firebase.firestore.Timestamp | Date = createTimestamp(),
-    public id: string = null
+    public id: string = null,
+    public activeGameId: string = null
   ) { }
 
   static async dbProfile(id?: string): Promise<Profile> {
@@ -41,7 +42,8 @@ export default class Profile {
           data.lastName,
           data.username,
           data.created,
-          snapshot.id
+          snapshot.id,
+          data.activeGameId
         );
     }
   }
