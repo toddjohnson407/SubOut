@@ -53,9 +53,9 @@ export class NewTeam extends React.Component {
 
   nextStep = (): any => {
     if (this.maxSteps > this.state.step) {
-      let plyrs = ['Jack', 'Jake', 'Josh', 'Ian', 'Ryland', 'Gabriele', 'Johnny', 'Timbo'];
-      this.setState({ players: plyrs });
-      console.log(this.state.players);
+      // let plyrs = ['Jack', 'Jake', 'Josh', 'Ian', 'Ryland', 'Gabriele', 'Johnny', 'Timbo'];
+      // this.setState({ players: plyrs });
+      // console.log(this.state.players);
       this.setState((prevState: any) => ({ step: prevState.step + 1 }));
     } else {
       this.createTeam();
@@ -101,7 +101,7 @@ export class NewTeam extends React.Component {
       let newTeam = new Team(profile.id, this.state.newTeamForm[0].opts.value, teamPlayers, +this.state.newTeamForm[1].opts.value, +this.state.newTeamForm[2].opts.value, +this.state.newTeamForm[3].opts.value, +this.state.newTeamForm[4].opts.value);
 
       db.collection('teams').doc().withConverter(Team.teamConverter).withConverter(Team.teamConverter).set(newTeam)
-        .then(_ => navigate('Dashboard'))
+        .then(_ => navigate('LoadingTeams'))
         .catch(err => console.log('Error creating test team:', err))
 
     }

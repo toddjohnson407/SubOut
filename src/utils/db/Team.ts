@@ -17,8 +17,8 @@ export class Team {
     public playersOnField: number,
     public playersPerSub: number,
     public subFrequency: number,
-    public id: string = null,
     public sport: string = null,
+    public id: string = null,
   ) { }
 
   /** Returns all Teams from the db for the active Profile */
@@ -52,7 +52,8 @@ export class Team {
           data.playersOnField,
           data.playersPerSub,
           data.subFrequency,
-          data.sport || null
+          data.sport || null,
+          snapshot.id,
         );
     }
   }

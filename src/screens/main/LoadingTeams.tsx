@@ -32,7 +32,7 @@ export class LoadingTeams extends React.Component {
     Profile.dbProfile().then((profile: Profile) => profile.id)
       .then((profileId: string) => Team.allTeams(profileId))
       .then((teams: Team[]) => {
-        let currentTeam = teams[0];
+        let currentTeam = teams[2];
         if (teams && teams instanceof Array) this.setState({ allTeams: teams, currentTeam });
         reset('ViewTeam', { currentTeam, allTeams: teams })
       }).catch(err => console.log('Error getting profile:', err));

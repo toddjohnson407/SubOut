@@ -1,6 +1,6 @@
 import Profile from './Profile';
-import Team from './Team';
-import Game from './Game';
+// import Team from './Team';
+// import Game from './Game';
 
 // let profileConverter = {
 //   toFirestore: function(profile: Profile) {

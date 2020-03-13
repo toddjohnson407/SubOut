@@ -42,7 +42,7 @@ export class ViewRoster extends React.Component {
     return (
       <SlidingUpPanel ref={c => this._panel = c} height={500} draggableRange={{
         top: 500,
-        bottom: 210
+        bottom: 410
       }}>
         { dragHandler => (
 

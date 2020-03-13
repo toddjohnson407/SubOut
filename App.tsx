@@ -9,7 +9,7 @@ import { Ionicons, Foundation, MaterialIcons, MaterialCommunityIcons, Entypo, Fo
 import { auth } from '@base/src/config';
 
 import { LoginRegister } from '@screens/LoginRegister';
-import { Dashboard, NewTeam, Settings, ViewTeam, ViewTeamModal, LoadingTeams, ViewRoster } from '@screens/MainScreens';
+import { Dashboard, NewTeam, Settings, ViewTeam, ViewTeamModal, LoadingTeams, ViewRoster, ActiveGame } from '@screens/MainScreens';
 
 import { NavigationContainer } from '@react-navigation/native';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
@@ -29,9 +29,12 @@ function MainContainer() {
     <NavigationContainer ref={navigationRef}>
       <Stack.Navigator headerMode="none">
         <Stack.Screen name="LoadingTeams" component={LoadingTeams}/>
-        <Stack.Screen name="ViewTeam" component={ViewTeam} options={{
-          animationEnabled: false
-        }}/>
+        <Stack.Screen name="ActiveGame" component={ActiveGame}/>
+        <Stack.Screen name="ViewTeam" component={ViewTeam} 
+          options={{
+            animationEnabled: false
+          }}
+        />
         <Stack.Screen name="Settings" component={Settings}/>
         <Stack.Screen name="SelectTeam" component={SelectTeam}
           options={{
@@ -39,7 +42,7 @@ function MainContainer() {
             gestureDirection: 'vertical-inverted',
             cardStyle: { backgroundColor: 'transparent' },
           }}
-          />
+        />
         <Stack.Screen name="ViewRoster" component={ViewRoster}
           options={{
             mode: 'modal',
